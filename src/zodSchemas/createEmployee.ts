@@ -12,7 +12,7 @@ export const nameValidation = z
 export const createEmployeeSchema = z.object({
   employeeId: idValidation,
   fullName: nameValidation,
-  salary: z.number().positive("Salary must be a positive number"),
+  salary: z.string(),
   facultyType: z.enum(["Marketing Team", "Development Team", "Others"]),
   additionalInfo: z.string().optional(),
 });

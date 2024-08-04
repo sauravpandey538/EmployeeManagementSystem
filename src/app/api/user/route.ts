@@ -1,5 +1,3 @@
-// app/api/user/route.ts
-
 import db from "@/lib/db";
 import { NextRequest, NextResponse } from "next/server";
 
@@ -10,7 +8,6 @@ export async function GET(req: NextRequest) {
     let queryBuilder = db("user").select("*");
 
     const { name, facultyType, employeeId } = query;
-    console.log(name, facultyType, employeeId);
 
     if (name) {
       queryBuilder = queryBuilder.where("fullName", "like", `%${name}%`);
@@ -22,15 +19,38 @@ export async function GET(req: NextRequest) {
       queryBuilder = queryBuilder.where("facultyType", facultyType);
     }
 
-    const user = await queryBuilder.clearSelect().select("*").first();
-    if (!user) {
+    // Fetch users based on the query
+    const users = await queryBuilder;
+
+    if (users.length === 0) {
       return NextResponse.json(
-        { message: "User don't exist", user: null },
+        { message: "No users found", users: null },
         { status: 404 }
       );
     }
 
-    return NextResponse.json({ user: user, employeeId });
+    // Fetch user details if users are found
+    const usersWithDetails = await Promise.all(
+      users.map(async (user) => {
+        const userDetails = await db("user")
+          .select(
+            "user.*",
+            "details.phoneNumber",
+            "details.email",
+            "details.linkedin",
+            "details.picture"
+          )
+          .leftJoin("details", "user.employeeId", "details.employeeId")
+          .where("user.employeeId", user.employeeId) // Assuming employeeId is unique per user
+          .first();
+
+        return userDetails;
+      })
+    );
+    // console.log(usersWithDetails);
+    return NextResponse.json({
+      users: usersWithDetails ? usersWithDetails : users,
+    });
   } catch (error) {
     console.error(error);
     return NextResponse.json(

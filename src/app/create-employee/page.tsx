@@ -28,17 +28,19 @@ import { zodResolver } from "@hookform/resolvers/zod"
 import { createEmployeeSchema } from "@/zodSchemas/createEmployee";
 // react-hook-form
 import { useForm } from "react-hook-form";
+import { useToast } from "@/components/ui/use-toast"
 
 
 const CreateEmployee: React.FC = () => {
     type Formdata = z.infer<typeof createEmployeeSchema>;
+    const { toast } = useToast()
 
     const form = useForm<Formdata>({
         resolver: zodResolver(createEmployeeSchema),
         defaultValues: {
             employeeId: '',
             fullName: '',
-            salary: 1,
+            salary: '',
             facultyType: "Others",
             additionalInfo: '',
         }
@@ -46,19 +48,27 @@ const CreateEmployee: React.FC = () => {
     const onSubmit = async (data: Formdata) => {
         try {
             const response = await axios.post("/api/insert-user", data)
-            console.log(response)
-        } catch (error) {
-            console.error(error)
+
+            toast({
+                title: "Success",
+                description: response.data.message,
+            })
+        } catch (error: any) {
+            toast({
+                variant: "destructive",
+                title: "Error",
+                description: error.response.data.message,
+            })
+
         }
-        finally {
-            console.log(data)
-        }
+
 
     }
 
 
     return (
         <div className=" flex min-h-screen max-w-screen justify-center items-center py-10 px-5">
+
             <Form {...form}>
                 <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8 max-w-96 w-full">
                     {
@@ -102,7 +112,7 @@ const CreateEmployee: React.FC = () => {
                                                     <Input  {...field} type={type}
                                                         onChange={(e) => {
                                                             const value = e.target.value;
-                                                            field.onChange(name === 'salary' ? Number(value) : value);
+                                                            field.onChange(value);
                                                         }}
                                                     />)
                                             }
