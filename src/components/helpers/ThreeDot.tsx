@@ -14,6 +14,7 @@ import {
 } from "@/components/ui/menubar"
 import { useToast } from '../ui/use-toast';
 import axios from 'axios';
+import { useRouter } from 'next/navigation';
 interface ComponentNameProps {
     employeeId: string,
     fullName: string,
@@ -21,6 +22,7 @@ interface ComponentNameProps {
 
 const ThreeDot: React.FC<ComponentNameProps> = ({ employeeId, fullName }) => {
     const { toast } = useToast()
+    const router = useRouter();
     const [open, setOpen] = useState<boolean>(false)
     const handleOption = () => { setOpen(!open) }
 
@@ -55,6 +57,9 @@ const ThreeDot: React.FC<ComponentNameProps> = ({ employeeId, fullName }) => {
 
 
     }
+    const handleUpdate = () => {
+        router.push(`/update-employee/${employeeId}`)
+    }
 
     return (
         <>
@@ -64,7 +69,7 @@ const ThreeDot: React.FC<ComponentNameProps> = ({ employeeId, fullName }) => {
                 <MenubarMenu>
                     <MenubarTrigger><BsThreeDotsVertical onClick={handleOption} className='size-4' /></MenubarTrigger>
                     <MenubarContent>
-                        <MenubarItem>
+                        <MenubarItem onClick={handleUpdate}>
                             Update
                         </MenubarItem>
                         <MenubarSeparator />
