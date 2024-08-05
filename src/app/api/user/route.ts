@@ -37,8 +37,8 @@ export async function GET(req: NextRequest) {
             "user.*",
             "details.phoneNumber",
             "details.email",
-            "details.linkedin",
-            "details.picture"
+            "details.linkedIn",
+            "details.image"
           )
           .leftJoin("details", "user.employeeId", "details.employeeId")
           .where("user.employeeId", user.employeeId) // Assuming employeeId is unique per user

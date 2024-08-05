@@ -6,8 +6,9 @@ export async function up(knex: Knex): Promise<void> {
     table.string("employeeId").notNullable();
     table.string("phoneNumber").notNullable().unique();
     table.string("email").notNullable().unique();
-    table.string("linkedin").notNullable().unique();
-    table.string("picture").defaultTo("");
+    table.string("linkedIn").notNullable().unique();
+    table.string("image").defaultTo("");
+    table.string("cv").defaultTo("");
 
     // Set up foreign key constraint
     table
