@@ -12,7 +12,7 @@ interface DataFormat {
 export async function POST(request: NextRequest) {
   try {
     const data: DataFormat = await request.json();
-    const { employeeId } = data as DataFormat;
+    const { phoneNumber, email, linkedIn, employeeId } = data as DataFormat;
     const user = await db("user").where({ employeeId }).first();
     if (!user) {
       return NextResponse.json(
@@ -21,9 +21,48 @@ export async function POST(request: NextRequest) {
       );
     }
     console.log(user, data);
-    const newData = await db("details").insert(data);
+
+    // Check if phone number already exists
+    const existingPhone = await db("details").where({ phoneNumber }).first();
+    if (existingPhone) {
+      return NextResponse.json(
+        { message: "Phone number already in use" },
+        { status: 409 } // Conflict
+      );
+    }
+
+    // Check if email already exists
+    const existingEmail = await db("details").where({ email }).first();
+    if (existingEmail) {
+      return NextResponse.json(
+        { message: "Email already in use" },
+        { status: 409 } // Conflict
+      );
+    }
+
+    // Check if LinkedIn URL already exists
+    const existingLinkedIn = await db("details").where({ linkedIn }).first();
+    if (existingLinkedIn) {
+      return NextResponse.json(
+        { message: "LinkedIn URL already in use" },
+        { status: 409 } // Conflict
+      );
+    }
+
+    await db("details").insert(data);
+    const userDetails = await db("user")
+      .select(
+        "user.*",
+        "details.phoneNumber",
+        "details.email",
+        "details.linkedIn",
+        "details.image"
+      )
+      .leftJoin("details", "user.employeeId", "details.employeeId")
+      .where("user.employeeId", user.employeeId) // Assuming employeeId is unique per user
+      .first();
     return NextResponse.json(
-      { message: "Employee data updated sucessfuly", newData },
+      { message: "Employee data updated sucessfuly", result: userDetails },
       { status: 200 }
     );
   } catch (error) {

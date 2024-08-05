@@ -48,7 +48,10 @@ const FileUploader = () => {
                     />
                     <Button
 
-                        onClick={() => document.getElementById(type)?.click()}
+                        onClick={(e) => {
+                            e.preventDefault()
+                            document.getElementById(type)?.click()
+                        }}
                         disabled={uploadStatus[type]}
 
                     >

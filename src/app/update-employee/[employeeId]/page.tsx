@@ -21,7 +21,6 @@ import { useParams } from "next/navigation";
 const UpdateEmployee = () => {
     const { toast } = useToast();
     const params = useParams()
-    console.log(params)
     type Formdata = z.infer<typeof updateEmployeeSchema>;
 
     const form = useForm<Formdata>({

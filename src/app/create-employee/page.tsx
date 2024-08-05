@@ -1,5 +1,5 @@
 'use client'
-import React from "react";
+import React, { useState } from "react";
 import axios from 'axios';
 // shadcn component
 import { Button } from "@/components/ui/button";
@@ -32,6 +32,7 @@ import { useToast } from "@/components/ui/use-toast"
 
 
 const CreateEmployee: React.FC = () => {
+    const [isLoading, setIsLoading] = useState<boolean>(false)
     type Formdata = z.infer<typeof createEmployeeSchema>;
     const { toast } = useToast()
 
@@ -46,6 +47,7 @@ const CreateEmployee: React.FC = () => {
         }
     })
     const onSubmit = async (data: Formdata) => {
+        setIsLoading(true)
         try {
             const response = await axios.post("/api/insert-user", data)
 
@@ -60,6 +62,9 @@ const CreateEmployee: React.FC = () => {
                 description: error.response.data.message,
             })
 
+        }
+        finally {
+            setIsLoading(false)
         }
 
 
@@ -126,7 +131,7 @@ const CreateEmployee: React.FC = () => {
                         )
                     }
 
-                    <Button type="submit" className="w-full">Submit</Button>
+                    <Button type="submit" className="w-full">{isLoading ? "Submitting..." : "Submit"}</Button>
 
 
 

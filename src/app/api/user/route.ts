@@ -18,6 +18,9 @@ export async function GET(req: NextRequest) {
     if (facultyType) {
       queryBuilder = queryBuilder.where("facultyType", facultyType);
     }
+    if (!name && !employeeId && !facultyType) {
+      return NextResponse.json({ message: "No user found" }, { status: 404 });
+    }
 
     // Fetch users based on the query
     const users = await queryBuilder;
