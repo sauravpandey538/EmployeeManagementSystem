@@ -24,7 +24,7 @@ interface EmployeeData {
 }
 
 interface ComponentProps {
-    employee: EmployeeData;
+    employee?: EmployeeData;
 }
 
 const ComponentName: React.FC<ComponentProps> = ({ employee }) => {
@@ -37,21 +37,21 @@ const ComponentName: React.FC<ComponentProps> = ({ employee }) => {
                 <div className='flex justify-between items-center border-b  pb-4 mb-2'>
                     <div className='flex gap-5 items-center'>
                         <img
-                            src={employee.picture || defaultProfilePicture}
-                            alt={`${employee.fullName}'s profile`}
+                            src={employee?.picture || defaultProfilePicture}
+                            alt={`${employee?.fullName}'s profile`}
                             width={40}
                             height={40}
                             style={{ borderRadius: '50%', objectFit: 'cover' }} // Ensures the profile picture is round
                         />
-                        <p># {" "}{employee.employeeId}</p>
+                        <p># {" "}{employee?.employeeId}</p>
                     </div>
-                    <ThreeDot employeeId={employee.employeeId} fullName={employee.fullName} />
+                    <ThreeDot employeeId={employee?.employeeId || ""} fullName={employee?.fullName || ""} />
                 </div>
-                <CardTitle>{employee.fullName}</CardTitle>
-                <CardDescription>{employee.additionalInfo}</CardDescription>
+                <CardTitle>{employee?.fullName}</CardTitle>
+                <CardDescription>{employee?.additionalInfo}</CardDescription>
             </CardHeader>
             <CardContent className='text-slate-600'>
-                <p> Employee is currently workng as <span className=' text-black font-semibold'>{employee.facultyType}</span> with the salery of Nrs {" "}<span className=' text-black font-semibold'>{employee.salary}</span>.</p>
+                <p> Employee is currently workng as <span className=' text-black font-semibold'>{employee?.facultyType}</span> with the salery of Nrs {" "}<span className=' text-black font-semibold'>{employee?.salary}</span>.</p>
             </CardContent>
             <CardFooter >
 

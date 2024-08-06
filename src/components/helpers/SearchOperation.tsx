@@ -62,7 +62,7 @@ const SearchOperation: React.FC = ({ }) => {
         await DoAxiosRequest("facultyType", facultyType);
     };
     return (
-        <main className="flex h-screen w-screen flex-col items-center justify-center p-24 gap-8">
+        <main className="flex h-auto w-auto flex-col items-center justify-center p-24 gap-8">
             <h1 className="text-3xl font-bold">Employee Management System</h1>
 
             <div className=" flex flex-col gap-5 max-w-96 w-full">
