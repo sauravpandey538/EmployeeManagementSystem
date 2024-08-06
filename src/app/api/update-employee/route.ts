@@ -59,7 +59,7 @@ export async function POST(request: NextRequest) {
         "details.image"
       )
       .leftJoin("details", "user.employeeId", "details.employeeId")
-      .where("user.employeeId", user.employeeId) // Assuming employeeId is unique per user
+      .where("user.employeeId", user.employeeId)
       .first();
     return NextResponse.json(
       { message: "Employee data updated sucessfuly", result: userDetails },
