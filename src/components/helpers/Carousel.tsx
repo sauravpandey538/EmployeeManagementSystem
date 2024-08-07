@@ -1,5 +1,5 @@
 import * as React from "react"
-
+import FirstPage from "../drawer/FirstPage/FilePortion"
 import { Card, CardContent } from "@/components/ui/card"
 import {
     Carousel,
@@ -13,20 +13,18 @@ import SearchOperation from "./SearchOperation"
 
 export function CarouselMain() {
     // good components will be used 
-    const components = [<ComponentName />, <SearchOperation />];
+    const components = [<FirstPage />, <SearchOperation />];
 
     return (
-        <Carousel className="w-full max-w-xs h-1/2">
+        <Carousel>
             <CarouselContent>
                 {components.map((children, index) => (
-                    <CarouselItem key={index}>
-                        <div className="p-1">
-                            <Card>
-                                <CardContent className="flex aspect-square items-center justify-center p-6">
-                                    {children}
-                                </CardContent>
-                            </Card>
-                        </div>
+                    <CarouselItem key={index} className="">
+
+
+                        {children}
+
+
                     </CarouselItem>
                 ))}
             </CarouselContent>

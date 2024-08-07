@@ -3,64 +3,77 @@ import axios from 'axios';
 import { Button } from "@/components/ui/button";
 import { useToast } from "@/components/ui/use-toast";
 
-const FileUploader = () => {
-    const [uploadStatus, setUploadStatus] = useState<{ [key: string]: boolean }>({});
+type FileUploaderProps = {
+    fileType: string;
+    buttonLabel: string;
+};
+
+const FileUploader: React.FC<FileUploaderProps> = ({ fileType, buttonLabel }) => {
+    const [uploadStatus, setUploadStatus] = useState<boolean>(false);
     const { toast } = useToast();
 
     const handleFileChange = async (e: ChangeEvent<HTMLInputElement>) => {
         const selectedFile = e.target.files?.[0];
-        const inputName = e.target.name;
 
         if (selectedFile) {
-            setUploadStatus((prev) => ({ ...prev, [inputName]: true }));
+            setUploadStatus(true);
 
             const formData = new FormData();
             formData.append('file', selectedFile);
 
             try {
                 const response = await axios.post('/api/upload-file', formData);
-                // toast({
-                //     title: "Success",
-                //     description: `File uploaded successfully: ${response.data.imgUrl}`,
-                // });
-                setUploadStatus((prev) => ({ ...prev, [inputName]: false }));
+                toast({
+                    title: "Success",
+                    description: `File uploaded successfully: ${response.data.imgUrl}`,
+                });
+                setUploadStatus(false);
             } catch (error) {
-                // toast({
-                //     variant: "destructive",
-                //     title: "Error",
-                //     description: `Error uploading file: ${(error as Error).message}`,
-                // });
-                setUploadStatus((prev) => ({ ...prev, [inputName]: false }));
+                toast({
+                    variant: "destructive",
+                    title: "Error",
+                    description: `Error uploading file: ${(error as Error).message}`,
+                });
+                setUploadStatus(false);
             }
         }
     };
 
     return (
-        <div className=" w-full flex  justify-between  items-center  flex-wrap  gap-5">
-            {['picture', 'cv'].map((type) => (
-                <div key={type} className=" flex flex-col min-w-fit max-w-screen-sm">
-                    <input
-                        id={type}
-                        name={type}
-                        type="file"
-                        onChange={handleFileChange}
-                        className="hidden"
-                    />
-                    <Button
-
-                        onClick={(e) => {
-                            e.preventDefault()
-                            document.getElementById(type)?.click()
-                        }}
-                        disabled={uploadStatus[type]}
-
-                    >
-                        {uploadStatus[type] ? `Uploading ${type}...` : `Upload ${type === 'picture' ? 'Picture' : 'CV'}`}
-                    </Button>
-                </div>
-            ))}
+        <div className="flex flex-col min-w-fit max-w-screen-sm">
+            <input
+                id={fileType}
+                name={fileType}
+                type="file"
+                onChange={handleFileChange}
+                className="hidden"
+            />
+            <Button
+                className='text-blue-700'
+                variant={fileType === "cv" ? 'outline' : 'ghost'}
+                onClick={(e) => {
+                    e.preventDefault();
+                    document.getElementById(fileType)?.click();
+                }}
+                disabled={uploadStatus}
+            >
+                {uploadStatus ? `Uploading ${buttonLabel}...` : `Upload ${buttonLabel}`}
+            </Button>
         </div>
     );
 };
 
 export default FileUploader;
+
+
+//                          // Usage for uploading a CV
+// <FileUploader
+//     fileType="cv"
+//     buttonLabel="CV"
+// />
+
+//                             // Usage for uploading a Picture
+// <FileUploader
+//     fileType="picture"
+//     buttonLabel="Picture"
+// />

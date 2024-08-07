@@ -5,6 +5,8 @@ import MainTable from "@/components/homepage/table-main";
 import Navigation from "@/components/homepage/navigation";
 import React from "react";
 import { CarouselMain } from "@/components/helpers/Carousel";
+import Others from "@/components/drawer/FirstPage/Other";
+import FirstPage from "@/components/drawer/FirstPage/FilePortion";
 
 
 
@@ -16,7 +18,10 @@ export default function Home() {
       <Navigation />
       <Heading />
       <MainTable />
+
       {/* <CarouselMain /> */}
+      {/* <Others /> */}
+      {/* <FirstPage /> */}
     </div>
   );
 }
