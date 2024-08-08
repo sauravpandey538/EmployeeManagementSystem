@@ -20,14 +20,12 @@ const holidayIndications: HolidayIndication[] = [
 ];
 const WorkingDays: React.FC<ArrValue> = ({ arr }) => {
     const [holiday, setHoliday] = useState<string[]>([]);
-    console.log("Arr is : ", arr)
 
     useEffect(() => {
         setHoliday(arr);
 
     }, [arr])
 
-    console.log(holiday)
 
     return (
         <div className="flex w-fit gap-1 flex-wrap min-w-28">

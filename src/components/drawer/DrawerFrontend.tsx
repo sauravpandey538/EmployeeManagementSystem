@@ -31,18 +31,18 @@ export function DrawerFrontend() {
                             <Plus className="h-4 w-4 mr-1" />
                             Add Employee
                         </DrawerTitle>
-                        <DrawerDescription>Fill out your employee details here</DrawerDescription>
+                        <DrawerDescription>Please fill out all the employee details before submitting.</DrawerDescription>
                     </DrawerHeader>
                     {/* component open here*/}
                     <CarouselMain />
                     <DrawerFooter>
 
                         <div className="flex flex-row-reverse  gap-3">
-                            <Button>
+                            {/* <Button>
                                 {" "}
                                 <Plus className="h-4 w-4 mx-1 font-bold" />
                                 Add Employee
-                            </Button>
+                            </Button> */}
 
                             <DrawerClose asChild>
                                 <Button variant="outline">Cancel</Button>

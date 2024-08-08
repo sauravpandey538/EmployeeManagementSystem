@@ -10,10 +10,12 @@ import {
 } from "@/components/ui/carousel"
 import ComponentName from "./EmployeeDetailsCard"
 import SearchOperation from "./SearchOperation"
+import DateData from "../drawer/SecondPage/Date"
+import DataInfo from "../drawer/SecondPage/DataInfo"
 
 export function CarouselMain() {
     // good components will be used 
-    const components = [<FirstPage />, <SearchOperation />];
+    const components = [<FirstPage />, <DataInfo />];
 
     return (
         <Carousel>
@@ -28,8 +30,8 @@ export function CarouselMain() {
                     </CarouselItem>
                 ))}
             </CarouselContent>
-            {/* <CarouselPrevious />
-            <CarouselNext /> */}
+            <CarouselPrevious />
+            <CarouselNext />
             {/* we will use condiction to enable after a proper validation */}
         </Carousel>
     )

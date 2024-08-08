@@ -1,3 +1,4 @@
+'use client';
 import React from 'react'
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
 import { DrawerDescription } from '@/components/ui/drawer'
@@ -18,7 +19,7 @@ function FirstPage() {
                     <div>
                         <div className='flex items-baseline'>
                             <FileUploader
-                                fileType="picture"
+                                fileType="image"
                                 buttonLabel="Picture"
                             />
                             <p className='text-gray-400'>|</p>

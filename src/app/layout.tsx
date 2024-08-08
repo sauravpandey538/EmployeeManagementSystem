@@ -20,11 +20,9 @@ export default function RootLayout({
       <body className={inter.className} suppressHydrationWarning={true}>
 
         {children}
-
         <Toaster />
 
       </body>
     </html>
   );
 }
-// chakra ui is being used for stepper purpose only

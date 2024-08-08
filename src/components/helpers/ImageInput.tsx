@@ -1,16 +1,21 @@
-import React, { useState, ChangeEvent } from 'react';
+'use client'
+import React, { useState, ChangeEvent, useEffect } from 'react';
 import axios from 'axios';
 import { Button } from "@/components/ui/button";
 import { useToast } from "@/components/ui/use-toast";
-
+import { useDispatch, useSelector } from 'react-redux';
+import { updateEmployeeData } from '@/lib/slices/formControl';
+import { FormState } from '@/lib/slices/formControl';
 type FileUploaderProps = {
-    fileType: string;
+    fileType: keyof FormState;
     buttonLabel: string;
 };
 
 const FileUploader: React.FC<FileUploaderProps> = ({ fileType, buttonLabel }) => {
     const [uploadStatus, setUploadStatus] = useState<boolean>(false);
     const { toast } = useToast();
+    const dispatch = useDispatch();
+
 
     const handleFileChange = async (e: ChangeEvent<HTMLInputElement>) => {
         const selectedFile = e.target.files?.[0];
@@ -23,10 +28,9 @@ const FileUploader: React.FC<FileUploaderProps> = ({ fileType, buttonLabel }) =>
 
             try {
                 const response = await axios.post('/api/upload-file', formData);
-                toast({
-                    title: "Success",
-                    description: `File uploaded successfully: ${response.data.imgUrl}`,
-                });
+                dispatch(updateEmployeeData({ field: fileType, value: response.data.imgUrl }));
+
+
                 setUploadStatus(false);
             } catch (error) {
                 toast({

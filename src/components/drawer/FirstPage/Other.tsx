@@ -165,8 +165,9 @@ const Others: React.FC = () => {
                         />
                     ))}
 
-                    <Button type="submit" className="w-full">
-                        {isLoading ? "Submitting..." : "Submit"}
+                    <Button type="submit" className="w-full bg-blue-700 hover:bg-blue-500">
+                        {/* {isLoading ? "Submitting..." : "Submit"} */}
+                        Next
                     </Button>
                 </form>
             </Form>
