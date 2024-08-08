@@ -14,14 +14,17 @@ import {
 } from "@/components/ui/form";
 import { useForm } from "react-hook-form";
 import { useToast } from "@/components/ui/use-toast";
+import { useDispatch, useSelector } from 'react-redux';
+import { updateEmployeeData } from '@/lib/slices/formControl';
 import DateData from "./Date";
-
+import { FormState } from "@/lib/slices/formControl";
 const DataInfo = () => {
     const [infoText, setInfoText] = useState<string>("");
+    const [phoneNumber, setPhoneNumber] = useState('');
     const [infoCount, setInfoCount] = useState<number>(0);
     const [isLoading, setIsLoading] = useState<boolean>(false);
     const { toast } = useToast();
-
+    const dispatch = useDispatch();
     const form = useForm({
         defaultValues: {
             phoneNumber: '',
@@ -30,18 +33,46 @@ const DataInfo = () => {
     });
 
     const onSubmit = async (data: any) => {
-        console.log("Form data:", data);
-        // Add submission logic here
+        console.log(data)
+        for (const field in data) {
+            if (data.hasOwnProperty(field)) {
+                dispatch(updateEmployeeData({ field: field as keyof FormState, value: data[field] }));
+            }
+        }
     };
 
     const handleInfoChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
         const newText = e.target.value;
-        setInfoText(newText);
-    };
 
+        setInfoText(newText);
+        // exceed limit will be controlled by zod later...
+
+    };
+    const handlePhoneNumberChange = (e: any) => {
+        const newDigit = e.target.value;
+        setPhoneNumber(newDigit);
+        console.log(phoneNumber.length)
+
+
+    }
     useEffect(() => {
+
         setInfoCount(infoText.length);
+        if (infoText.trim() !== '') {
+            dispatch(updateEmployeeData({ field: 'info' as keyof FormState, value: infoText }));
+
+
+        }
+
+
     }, [infoText]);
+    useEffect(() => {
+
+        if (phoneNumber.length === 10) {
+            dispatch(updateEmployeeData({ field: 'phoneNumber' as keyof FormState, value: phoneNumber }));
+        }
+
+    }, [phoneNumber]);
 
     return (
         <div className="flex flex-col gap-3 max-w-screen-sm w-full p-5">
@@ -68,7 +99,6 @@ const DataInfo = () => {
                                         {name === 'info' ? (
                                             <Textarea
                                                 {...field}
-                                                // value={field.value || ""}
                                                 onChange={(e) => {
                                                     field.onChange(e);
                                                     handleInfoChange(e);
@@ -82,6 +112,10 @@ const DataInfo = () => {
                                                     type={type}
                                                     placeholder="e.g., 9898989898"
                                                     className={`${Icon ? 'pl-12' : ''}`}
+                                                    onChange={(e) => {
+                                                        field.onChange(e);
+                                                        handlePhoneNumberChange(e); // Trigger form submission
+                                                    }}
                                                 />
                                                 {Icon && (
                                                     <Icon className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-500" />
@@ -95,14 +129,16 @@ const DataInfo = () => {
                         />
                     ))}
 
-                    {/* <Button type="submit" className="w-full bg-blue-700">
+
+                </form>
+
+            </Form>
+            {/* <Button type="submit" className="w-full bg-blue-700">
                         {isLoading ? "Submitting..." : "Submit"}
                     </Button> */}
-                </form>
-            </Form>
             <DateData />
         </div>
     );
 };
-
 export default DataInfo;
+// note : is onchange makes website slow, i will send value as prop to dateInfo

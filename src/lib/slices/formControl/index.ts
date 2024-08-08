@@ -6,7 +6,7 @@ export interface FormState {
   type: string;
   holiday: string[];
   info: string;
-  joinedAt: number;
+  joinedAt: string;
   workingTime: string;
   cv: string;
   image: string;
@@ -20,7 +20,7 @@ const initialState: FormState = {
   type: "",
   holiday: [],
   info: "",
-  joinedAt: Date.now(),
+  joinedAt: "",
   workingTime: "",
   cv: "",
   image: "",

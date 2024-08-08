@@ -1,5 +1,5 @@
 "use client";
-import * as React from "react";
+import React, { useEffect } from "react";
 import { useState } from "react";
 import { Button } from "../ui/button";
 import { X } from "lucide-react";
@@ -7,10 +7,13 @@ import { ChevronUp } from "lucide-react";
 import { motion } from "framer-motion"
 import { Check } from "lucide-react";
 import { Label } from "../ui/label";
+import { useDispatch, useSelector } from 'react-redux';
+import { updateEmployeeData } from '@/lib/slices/formControl';
+import { FormState } from "@/lib/slices/formControl"
 const MultiSelector = () => {
     const [selectedHolidays, setSelectedHolidays] = useState<string[]>([]);
     const [isOpen, setIsOpen] = useState(false);
-
+    const dispatch = useDispatch();
     const handleSelectChange = (value: string) => {
         if (selectedHolidays.length <= 2) {
 
@@ -37,7 +40,13 @@ const MultiSelector = () => {
 
         }
     };
+    useEffect(() => {
+        if (selectedHolidays) {
+            dispatch(updateEmployeeData({ field: 'holiday' as keyof FormState, value: selectedHolidays }));
 
+        }
+
+    }, [selectedHolidays])
     const weekDays = [
         "Sunday",
         "Monday",
@@ -102,7 +111,7 @@ const MultiSelector = () => {
                 )}
             </div>
             {isOpen && (
-                <div className="absolute bottom-16 mt-2 w-full bg-white border border-gray-300 rounded shadow-lg z-10 text-slate-500 overflow-auto">
+                <div className="absolute bottom-16 mt-2 w-full bg-white border border-gray-300 rounded shadow-lg  text-slate-500 overflow-auto">
                     <div className="p-2 ">
                         {/* <div className="font-bold text-gray-700">WeekDays</div> */}
                         {weekDays.map((day) => (

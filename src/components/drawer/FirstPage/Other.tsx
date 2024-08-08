@@ -1,18 +1,17 @@
 "use client";
 import React, { useState } from "react";
-import axios from "axios";
 import { Check, Clock, User } from "lucide-react";
-// shadcn component
+// shadcn component imports
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { MapPin, Mail } from "lucide-react";
-import { Label } from "@/components/ui/label";
-import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
+import { useDispatch } from 'react-redux';
+import { updateEmployeeData } from '@/lib/slices/formControl';
+import { FormState } from "@/lib/slices/formControl";
 import {
     Form,
     FormControl,
-    FormDescription,
     FormField,
     FormItem,
     FormLabel,
@@ -40,19 +39,14 @@ const options: Option[] = [
     { value: "PART-TIME", label: "PART-TIME", icon: <Clock /> },
     { value: "FULL-TIME", label: "FULL-TIME", icon: <User /> },
 ];
-const Others: React.FC = () => {
-    const [selectedValue, setSelectedValue] = useState<string>("PART-TIME");
 
-    const handleButtonClick = (value: string) => {
-        setSelectedValue(value);
-    };
+const Others: React.FC = () => {
+    const [selectedValue, setSelectedValue] = useState<string>("");
     const [isLoading, setIsLoading] = useState<boolean>(false);
     const { toast } = useToast();
-
+    const dispatch = useDispatch();
     const form = useForm({
         defaultValues: {
-            imageUrl: "",
-            cvUrl: "",
             fullName: "",
             type: "",
             specialist: "",
@@ -60,31 +54,31 @@ const Others: React.FC = () => {
             address: "",
         },
     });
+
+    const handleButtonClick = (value: string, e: any) => {
+        e.preventDefault();
+        form.setValue("type", value); // Sync form value with state
+        setSelectedValue(value);
+        dispatch(updateEmployeeData({ field: "type", value })); // Dispatch individual update
+    };
+
+    const handleInputChange = (field: keyof FormState) => (e: React.ChangeEvent<HTMLInputElement>) => {
+        const value = e.target.value;
+        form.setValue(field as any, value); // Sync form value with state
+        dispatch(updateEmployeeData({ field, value })); // Dispatch individual update
+    };
+
     const onSubmit = async (data: any) => {
-        // setIsLoading(true)
-        // try {
-        //     const response = await axios.post("/api/insert-user", data)
-        //     toast({
-        //         title: "Success",
-        //         description: response.data.message,
-        //     })
-        // } catch (error: any) {
-        //     toast({
-        //         variant: "destructive",
-        //         title: "Error",
-        //         description: error.response.data.message,
-        //     })
-        // }
-        // finally {
-        //     setIsLoading(false)
-        // }
-        sessionStorage.setItem("FirstPart", "Verified");
-        console.log("Form Submitted and session stored as FirstPart")
+        // This can be used for final submission if necessary
+        setIsLoading(true);
+        // You might want to perform some additional logic here
+        setIsLoading(false);
+        toast({ title: "Submitted!", description: "Your form was submitted successfully." });
     };
 
     return (
-        <div className=" flex max-w-screen-sm w-full p-5">
-            <Form {...form} >
+        <div className="flex max-w-screen-sm w-full p-5">
+            <Form {...form}>
                 <form
                     onSubmit={form.handleSubmit(onSubmit)}
                     className="space-y-4 w-full"
@@ -103,7 +97,7 @@ const Others: React.FC = () => {
                             render={({ field }) => (
                                 <FormItem>
                                     <FormLabel>{label}</FormLabel>
-                                    <FormControl className=" w-full">
+                                    <FormControl className="w-full">
                                         {name === "type" ? (
                                             <div className="flex w-full justify-between items-center gap-2">
                                                 {options.map((option) => (
@@ -113,11 +107,11 @@ const Others: React.FC = () => {
                                                     >
                                                         <Button
                                                             className={`flex gap-2 items-center ${selectedValue === option.value
-                                                                ? "bg-blue-500 text-white"
+                                                                ? "bg-blue-700 text-white"
                                                                 : "bg-none text-black"
-                                                                } outline-blue-700`}
+                                                                }`}
                                                             variant="outline"
-                                                            onClick={() => handleButtonClick(option.value)}
+                                                            onClick={(e) => handleButtonClick(option.value, e)}
                                                         >
                                                             {option.icon}
                                                             {option.label}
@@ -127,7 +121,10 @@ const Others: React.FC = () => {
                                             </div>
                                         ) : name === "specialist" ? (
                                             <Select
-                                                onValueChange={(value) => field.onChange(value)}
+                                                onValueChange={(value) => {
+                                                    field.onChange(value);
+                                                    dispatch(updateEmployeeData({ field: "specialist", value }));
+                                                }}
                                                 value={field.value as string}
                                             >
                                                 <SelectTrigger>
@@ -148,10 +145,7 @@ const Others: React.FC = () => {
                                                 <Input
                                                     {...field}
                                                     type={type}
-                                                    onChange={(e) => {
-                                                        const value = e.target.value;
-                                                        field.onChange(value);
-                                                    }}
+                                                    onChange={handleInputChange(name as keyof FormState)}
                                                     className={` ${Icon ? 'pl-10' : ''}`} />
                                                 {Icon && (
                                                     <Icon className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-500" />
@@ -165,10 +159,7 @@ const Others: React.FC = () => {
                         />
                     ))}
 
-                    <Button type="submit" className="w-full bg-blue-700 hover:bg-blue-500">
-                        {/* {isLoading ? "Submitting..." : "Submit"} */}
-                        Next
-                    </Button>
+
                 </form>
             </Form>
         </div>

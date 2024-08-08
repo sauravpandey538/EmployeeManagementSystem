@@ -5,6 +5,8 @@ import { Button } from "@/components/ui/button";
 import { useToast } from "@/components/ui/use-toast";
 import { useDispatch, useSelector } from 'react-redux';
 import { updateEmployeeData } from '@/lib/slices/formControl';
+//dispatch(updateEmployeeData({ field: fileType, value: response.data.imgUrl }));
+
 import { FormState } from '@/lib/slices/formControl';
 type FileUploaderProps = {
     fileType: keyof FormState;
