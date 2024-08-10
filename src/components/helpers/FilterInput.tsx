@@ -1,8 +1,8 @@
-"use client"
+"use client";
 
-import { Button } from "@/components/ui/button"
-import { Input } from "@/components/ui/input"
-import { Label } from "@/components/ui/label"
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
 import {
     Sheet,
     SheetClose,
@@ -12,10 +12,8 @@ import {
     SheetHeader,
     SheetTitle,
     SheetTrigger,
-} from "@/components/ui/sheet"
-import { FilterXIcon, Plus } from 'lucide-react';
-
-
+} from "@/components/ui/sheet";
+import { FilterXIcon, Plus } from "lucide-react";
 
 const FilterInput = () => {
     const handleFacultyFilter = () => { };
@@ -24,15 +22,19 @@ const FilterInput = () => {
         { name: "type", onClick: handleFacultyFilter },
         { name: "holiday", onClick: handleFacultyFilter },
         { name: "available", onClick: handleFacultyFilter },
-    ]
+    ];
     return (
-        <div className="grid grid-cols-2 gap-2">
-
-            <Sheet >
+        <div className="">
+            <Sheet>
                 <SheetTrigger asChild>
-                    <Button variant="outline">top</Button>
+
+                    <Button className=" sm:flex items-center bg-blue-700 gap-1">
+                        <FilterXIcon className="h-4 w-4  font-bold" />
+
+                        Filter
+                    </Button>
                 </SheetTrigger>
-                <SheetContent side='top' >
+                <SheetContent side="top">
                     <SheetHeader>
                         <SheetTitle>Edit profile</SheetTitle>
                         <SheetDescription>
@@ -40,10 +42,7 @@ const FilterInput = () => {
                         </SheetDescription>
                     </SheetHeader>
 
-
-
-
-                    <div className='flex gap-1'>
+                    <div className="flex gap-1">
                         {[
                             { name: "specialist", onClick: handleFacultyFilter },
                             { name: "type", onClick: handleFacultyFilter },
@@ -52,33 +51,30 @@ const FilterInput = () => {
                         ].map(({ name, onClick }, index) => (
                             <Button
                                 key={index}
-                                className='flex items-center rounded-full bg-blue-700'
+                                className="flex items-center rounded-full bg-blue-700"
                                 onClick={onClick}
                             >
-                                {name.charAt(0).toUpperCase() + name.slice(1)}{' working?'}
+                                {name.charAt(0).toUpperCase() + name.slice(1)}
+                                {" working?"}
                                 <Plus className="h-4 w-4" />
                             </Button>
                         ))}
                     </div>
 
-
-
                     <SheetFooter>
                         <SheetClose asChild>
-                            <Button type="submit" className="bg-blue-700 hover:bg-blue-500">Search Filter</Button>
+                            <Button type="submit" className="bg-blue-700 hover:bg-blue-500">
+                                Search Filter
+                            </Button>
                         </SheetClose>
                     </SheetFooter>
                 </SheetContent>
             </Sheet>
-
         </div>
-    )
-}
+    );
+};
 
 export default FilterInput;
-
-
-
 
 // //const employeeList = [
 //     { "name": "John Doe", "facultyType": "The Coding Team" },

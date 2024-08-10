@@ -23,7 +23,7 @@ export function DatePicker() {
     useEffect(() => {
         if (date) {
             const newDate = format(date, "PPP")
-            console.log(newDate)
+            console.log(newDate, typeof newDate)
             dispatch(updateEmployeeData({ field: 'joinedAt' as keyof FormState, value: newDate }));
         }
 

@@ -1,9 +1,11 @@
+'use client'
 import React from 'react';
 import { Button } from '../ui/button';
 import { Input } from '../ui/input';
 import { FilterXIcon, Plus, Search } from 'lucide-react';
 import { DrawerFrontend } from '../drawer/DrawerFrontend';
 import FilterInput from '../helpers/FilterInput';
+import DebouncedSearchField from '../helpers/DebouncedSearchField';
 interface ComponentNameProps {
 
 }
@@ -14,22 +16,11 @@ const Heading: React.FC<ComponentNameProps> = ({ }) => {
             <h1 className='text-md md:text-2xl mb-2 sm:mb-0'>EMS</h1>
 
 
-            <div className="flex w-full max-w-sm items-center space-x-2 relative">
-                <Input type="email" placeholder="Search employee here..." className='rounded-2xl' />
-                <Button type="submit"
-                    className='rounded-2xl  bg-white text-black hover:bg-white hover:text-current border'>
-                    <Search className="h-4 w-4" />
-                </Button>
-            </div>
-            <div className='flex gap-2 mt-2 sm:mt-0'>
-                <Button className='flex items-center sm:hidden rounded-full bg-blue-700'>
-                    <FilterXIcon className="h-4 w-4" />
-                </Button>
-                <Button className='flex items-center sm:hidden rounded-full bg-blue-700'>
-                    <Plus className="h-4 w-4" />
-                </Button>
-                <FilterInput />
+            <DebouncedSearchField />
 
+            <div className='flex gap-2 w-fit'>
+
+                <FilterInput />
                 <DrawerFrontend />
             </div>
         </div>

@@ -12,7 +12,8 @@
     "migrate:up": "npm run knex:run -- migrate:up",
     "migrate:down": "npm run knex:run -- migrate:down",
     "migrate:up:prod": "NODE_ENV=production npm run knex:run -- migrate:up",
-    "migrate:down:prod": "NODE_ENV=production npm run knex:run -- migrate:down"
+    "migrate:down:prod": "NODE_ENV=production npm run knex:run -- migrate:down",
+    "migrate:list": "npm run knex:run -- migrate:list"
   },
   "dependencies": {
     "@hookform/resolvers": "^3.9.0",

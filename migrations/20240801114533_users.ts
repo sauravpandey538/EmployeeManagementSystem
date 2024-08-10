@@ -9,7 +9,6 @@ export async function up(knex: Knex): Promise<void> {
     table.string("linkedIn").notNullable().unique();
     table.string("image").defaultTo("");
     table.string("cv").defaultTo("");
-
     // Set up foreign key constraint
     table
       .foreign("employeeId")

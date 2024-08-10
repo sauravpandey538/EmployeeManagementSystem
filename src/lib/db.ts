@@ -9,6 +9,9 @@ const db = knex({
     password: process.env.DB_PASSWORD,
     database: process.env.DB_NAME,
   },
+  migrations: {
+    tableName: "knex_migrations",
+  },
 });
 
 export default db;

@@ -18,7 +18,7 @@ export function DrawerFrontend() {
     return (
         <Drawer>
             <DrawerTrigger asChild>
-                <Button className="hidden sm:flex items-center bg-blue-700">
+                <Button className=" sm:flex items-center bg-blue-700 gap-1">
                     <Plus className="h-4 w-4  font-bold" />
                     Add Employee
                 </Button>

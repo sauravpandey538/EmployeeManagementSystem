@@ -11,6 +11,7 @@ export interface FormState {
   cv: string;
   image: string;
   phoneNumber: string;
+  id?: any;
 }
 
 const initialState: FormState = {

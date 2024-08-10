@@ -6,24 +6,18 @@ import { Button } from "@/components/ui/button"
 import ThreeDot from "@/components/helpers/ThreeDot"
 // This type is used to define the shape of our data.
 // You can use a Zod schema here if you want.
-export interface ContactSchema {
-    [key: string]: string
-}
-export interface NameSchema {
-    [key: string]: string
-}
 
-
-export type Payment = {
+export type Employee = {
     id: string
-    name: NameSchema
+    fullName: string
     holiday: string[]
-    contact: ContactSchema
+    phoneNumber: string,
+    email: string,
     info: string
-    status: "FULL-TIME" | "PART-TIME"
+    type: "FULL-TIME" | "PART-TIME"
 }
 
-export const columns: ColumnDef<Payment>[] = [
+export const columns: ColumnDef<Employee>[] = [
     {
         accessorKey: "id",
         header: "Employee ID",
@@ -34,8 +28,8 @@ export const columns: ColumnDef<Payment>[] = [
         cell({ row }) {
             const value = row.original
             return <div className="grid gap-1">
-                <div className="font-semibold text-black"> {value.name.name} </div>
-                <div className="text-slate-600 text-sm"> {value.name.facultyType} </div>
+                <div className="font-semibold text-black"> {value.fullName} </div>
+                <div className="text-slate-600 text-sm"> {value.fullName} </div>
             </div>
         }
     },
@@ -45,8 +39,8 @@ export const columns: ColumnDef<Payment>[] = [
         cell({ row }) {
             const value = row.original
             return <div className="grid gap-1">
-                <div> {value.contact.phoneNumber} </div>
-                <div className="text-blue-700"> {value.contact.email} </div>
+                <div> {value.phoneNumber} </div>
+                <div className="text-blue-700"> {value.email} </div>
             </div>
         }
     },
@@ -69,8 +63,8 @@ export const columns: ColumnDef<Payment>[] = [
             const value = row.original
             return <Button
                 variant={'ghost'}
-                className={`${value.status === 'FULL-TIME' ? "text-green-400 bg-green-50" : "text-blue-400 bg-blue-50"}`}
-            >{value.status}</Button>;
+                className={`${value.type === 'FULL-TIME' ? "text-green-400 bg-green-50" : "text-blue-400 bg-blue-50"}`}
+            >{value.type}</Button>;
         }
     },
     {
@@ -80,7 +74,7 @@ export const columns: ColumnDef<Payment>[] = [
             const value = row.original
 
             return <ThreeDot
-                fullName={value.name.name}
+                fullName={value.fullName}
                 employeeId={value.id} />
         }
     },
