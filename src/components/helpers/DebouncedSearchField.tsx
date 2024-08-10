@@ -3,30 +3,13 @@ import { Input } from '@/components/ui/input';
 import { Button } from '@/components/ui/button';
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { X } from 'lucide-react';
+import { useAppSelector } from '@/lib/hooks';
 interface User {
     fullName: string;
-    picture: string;
+    image: string;
 }
 
-const fetchUsers = async (query: string): Promise<User[]> => {
-    const allUsers: User[] = [
-        { fullName: 'Alice Smith', picture: 'https://via.placeholder.com/150' },
-        { fullName: 'Bob Johnson', picture: 'https://via.placeholder.com/150' },
-        { fullName: 'Charlie Williams', picture: 'https://via.placeholder.com/150' },
-        { fullName: 'David Brown', picture: 'https://via.placeholder.com/150' },
-        { fullName: 'Edward Jones', picture: 'https://via.placeholder.com/150' },
-        { fullName: 'Frank Garcia', picture: 'https://via.placeholder.com/150' },
-        { fullName: 'Grace Miller', picture: 'https://via.placeholder.com/150' },
-    ];
 
-    return new Promise((resolve) => {
-        setTimeout(() => {
-            resolve(allUsers.filter(user =>
-                user.fullName.toLowerCase().includes(query.toLowerCase())
-            ));
-        }, 300);
-    });
-};
 
 function useDebounce(value: string, delay: number): string {
     const [debouncedValue, setDebouncedValue] = useState<string>(value);
@@ -52,6 +35,31 @@ const DebouncedSearchField: React.FC = () => {
     const debouncedInput = useDebounce(inputValue, 500);
     const resultDivRef = useRef<HTMLDivElement>(null);
     const inputRef = useRef<HTMLInputElement>(null);
+    const employeeData = useAppSelector(state => state.api.data); // Adjust according to your state shape
+    const fetchUsers = async (query: string): Promise<User[]> => {
+        // const allUsers: User[] = [
+        //     { fullName: 'Alice Smith', picture: 'https://via.placeholder.com/150' },
+        //     { fullName: 'Bob Johnson', picture: 'https://via.placeholder.com/150' },
+        //     { fullName: 'Charlie Williams', picture: 'https://via.placeholder.com/150' },
+        //     { fullName: 'David Brown', picture: 'https://via.placeholder.com/150' },
+        //     { fullName: 'Edward Jones', picture: 'https://via.placeholder.com/150' },
+        //     { fullName: 'Frank Garcia', picture: 'https://via.placeholder.com/150' },
+        //     { fullName: 'Grace Miller', picture: 'https://via.placeholder.com/150' },
+        // ];
+
+        const allUsers: User[] = employeeData.users.map((employee: any) => ({
+            fullName: employee.fullName,
+            image: employee.image
+        }))
+        console.log(allUsers)
+        return new Promise((resolve) => {
+            setTimeout(() => {
+                resolve(allUsers.filter(user =>
+                    user.fullName.toLowerCase().includes(query.toLowerCase())
+                ));
+            }, 300);
+        });
+    };
 
     useEffect(() => {
         if (debouncedInput) {
@@ -113,7 +121,7 @@ const DebouncedSearchField: React.FC = () => {
                             className='flex w-full items-center hover:bg-blue-300 bg-slate-200 p-3 gap-3 cursor-pointer'
                         >
                             <Avatar className='w-10 h-10'>
-                                <AvatarImage src={user.picture} alt={user.fullName} />
+                                <AvatarImage src={user.image} alt={user.fullName} className='object-cover object-center' />
                                 <AvatarFallback>{user.fullName[0]}</AvatarFallback>
                             </Avatar>
                             <div>

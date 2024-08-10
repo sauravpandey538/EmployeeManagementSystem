@@ -8,6 +8,8 @@ import { useRouter } from "next/navigation";
 import axios from "axios";
 import { useState } from "react";
 import { useToast } from "@/components/ui/use-toast";
+import { useAppSelector } from "@/lib/hooks";
+import { Employee } from "../homepage/columns";
 const SearchOperation: React.FC = ({ }) => {
     const [employeeId, setEmployeeId] = useState("");
     const [name, setName] = useState("");

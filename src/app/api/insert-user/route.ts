@@ -24,22 +24,27 @@ export async function POST(request: NextRequest) {
     console.log(data);
     const { email, phoneNumber } = data;
     // checking if dublicate employee exit
-    let queryBuilder = db("user").select("*");
+    // TODO: Learn about first() and why it throwed error when i used it two time in a row below.
+    let queryBuilder = db("employee").select("*");
 
-    if (phoneNumber) {
-      queryBuilder = queryBuilder.where("phoneNumber", phoneNumber);
+    const existingEmployeeWithNumber = await queryBuilder
+      .where("phoneNumber", phoneNumber)
+      .first();
+    if (existingEmployeeWithNumber) {
       return NextResponse.json(
         { message: "This phoneNumber has been already used." },
         { status: 409 }
       );
     }
-    if (email) {
-      queryBuilder = queryBuilder.where("email", email);
+
+    const existingEmployee = await queryBuilder.where("email", email);
+    if (existingEmployee) {
       return NextResponse.json(
         { message: "This Email has been already used." },
         { status: 409 }
       );
     }
+    console.log("This line", existingEmployeeWithNumber, existingEmployee);
 
     // Generate a new employee ID
     const newEmployeeId = await generateEmployeeId();

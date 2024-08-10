@@ -8,8 +8,9 @@ import ThreeDot from "@/components/helpers/ThreeDot"
 // You can use a Zod schema here if you want.
 
 export type Employee = {
-    id: string
+    employeeId: string
     fullName: string
+    specialist: string
     holiday: string[]
     phoneNumber: string,
     email: string,
@@ -19,7 +20,7 @@ export type Employee = {
 
 export const columns: ColumnDef<Employee>[] = [
     {
-        accessorKey: "id",
+        accessorKey: "employeeId",
         header: "Employee ID",
     },
     {
@@ -29,7 +30,7 @@ export const columns: ColumnDef<Employee>[] = [
             const value = row.original
             return <div className="grid gap-1">
                 <div className="font-semibold text-black"> {value.fullName} </div>
-                <div className="text-slate-600 text-sm"> {value.fullName} </div>
+                <div className="text-slate-600 text-sm"> {value.specialist} </div>
             </div>
         }
     },
