@@ -7,6 +7,7 @@ import { fetchEmployee } from "@/lib/slices/apiCall";
 import { fetchFilterEmployee } from "@/lib/slices/employeeFilter";
 import { Provider } from "react-redux";
 import { store } from "@/lib/store";
+import SkeletonCard from "@/components/skeleton/table";
 export default function MainTable() {
     const [data, setData] = useState<any[]>([]);
     const dispatch = useAppDispatch();
@@ -14,17 +15,6 @@ export default function MainTable() {
     const isLoading = useAppSelector(state => state.api.isLoading);
     const isError = useAppSelector(state => state.api.isError);
 
-    // useEffect(() => {
-    //     const fetchEmployeeData = async () => {
-    //         try {
-    //             await dispatch(fetchFilterEmployee());
-    //         } catch (error) {
-    //             console.error("Failed to fetch filter employee data:", error);
-    //         }
-    //     };
-
-    //     fetchEmployeeData();
-    // }, [dispatch]);
 
     useEffect(() => {
         if (employeeData) {
@@ -37,11 +27,11 @@ export default function MainTable() {
     return (
         <div className="container mx-auto py-5">
             <Provider store={store}>
-                {isLoading && <p>Loading...</p>}
+                {isLoading && <SkeletonCard />}
                 {isError && <p>Error loading data.</p>}
-                {!isLoading && !isError && <DataTable columns={columns} data={data} />}
-                {/* <SkeletonTable /> */}
+                {!isError && employeeData && <DataTable columns={columns} data={data} />}
             </Provider>
         </div>
     );
 }
+// error : when we refresh the webpage, employee is getting empty

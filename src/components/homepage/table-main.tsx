@@ -33,10 +33,10 @@ export default function MainTable() {
 
     return (
         <div className="container mx-auto py-5">
-            {isLoading && <p>Loading...</p>}
+            {isLoading && <SkeletonTable />}
             {isError && <p>Error loading data.</p>}
-            {!isLoading && !isError && <DataTable columns={columns} data={data} />}
-            {/* <SkeletonTable /> */}
+            {!isError && <DataTable columns={columns} data={data} />}
+
         </div>
     );
 }

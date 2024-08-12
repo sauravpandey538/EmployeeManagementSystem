@@ -3,7 +3,7 @@ import { NextResponse, NextRequest } from "next/server";
 
 export async function POST(req: NextRequest) {
   try {
-    const { specialist, holiday } = await req.json();
+    const { specialist, holiday, type } = await req.json();
     let query = db("employee");
     console.log(specialist, holiday);
     //Development Team [ 'Thursday', 'Friday', 'Saturday' ]
@@ -11,6 +11,9 @@ export async function POST(req: NextRequest) {
     // Apply filters based on the request body
     if (specialist) {
       query = query.where("specialist", specialist);
+    }
+    if (type) {
+      query = query.where("type", type);
     }
     if (holiday && holiday.length > 0) {
       // It works with JSON arrays and objects.
