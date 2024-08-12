@@ -58,7 +58,7 @@ const MultiSelector = () => {
     ];
 
     return (
-        <div className="relative inline-block w-full max-w-screen-sm mt-5">
+        <div className="relative inline-block w-full mt-5">
             <Label>Holidays</Label>
             <div
 
@@ -111,7 +111,7 @@ const MultiSelector = () => {
                 )}
             </div>
             {isOpen && (
-                <div className="absolute bottom-16 mt-2 w-full bg-white border border-gray-300 rounded shadow-lg  text-slate-500 overflow-auto">
+                <div className="absolute top-16 mt-2 w-full bg-white border border-gray-300 rounded shadow-lg  text-slate-500 overflow-auto">
                     <div className="p-2 ">
                         {/* <div className="font-bold text-gray-700">WeekDays</div> */}
                         {weekDays.map((day) => (

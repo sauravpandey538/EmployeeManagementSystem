@@ -1,8 +1,8 @@
 "use client";
-
+import React from "react";
 import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
+import { useRouter } from "next/navigation";
+
 import {
     Sheet,
     SheetClose,
@@ -13,88 +13,95 @@ import {
     SheetTitle,
     SheetTrigger,
 } from "@/components/ui/sheet";
+import {
+    Select,
+    SelectContent,
+    SelectItem,
+    SelectTrigger,
+    SelectValue,
+} from "@/components/ui/select";
 import { FilterXIcon, Plus } from "lucide-react";
+import MultiSelector from "./MultiSelector";
+import { useAppDispatch, useAppSelector } from '@/lib/hooks'
+import axios from "axios";
+import { FormState } from "@/lib/slices/formControl";
+import { useDispatch } from 'react-redux';
+import { updateEmployeeData } from '@/lib/slices/formControl';
+import { fetchFilterEmployee } from "@/lib/slices/employeeFilter";
+const FilterInput = React.memo(() => {
+    const router = useRouter();
+    const formState = useAppSelector(a => a.form);
+    const dispatch = useAppDispatch()
+    const fetchData = async (formState: FormState) => {
+        const requestBody: Partial<FormState> = {};
 
-const FilterInput = () => {
-    const handleFacultyFilter = () => { };
-    const btns = [
-        { name: "specialist", onClick: handleFacultyFilter },
-        { name: "type", onClick: handleFacultyFilter },
-        { name: "holiday", onClick: handleFacultyFilter },
-        { name: "available", onClick: handleFacultyFilter },
-    ];
+        if (formState.specialist.trim() !== "") {
+            requestBody.specialist = formState.specialist;
+        }
+        if (formState.holiday.length > 0) {
+            requestBody.holiday = formState.holiday;
+        }
+
+        try {
+            dispatch(fetchFilterEmployee(requestBody));
+            router.push('/filter/employee')
+        } catch (error) {
+            console.error('Error fetching data:', error);
+        }
+    };
+
     return (
-        <div className="">
+        <div>
             <Sheet>
                 <SheetTrigger asChild>
-
-                    <Button className=" sm:flex items-center bg-blue-700 gap-1">
-                        <FilterXIcon className="h-4 w-4  font-bold" />
-
+                    <Button className="flex items-center bg-blue-700 gap-1">
+                        <FilterXIcon className="h-4 w-4 font-bold" />
                         Filter
                     </Button>
                 </SheetTrigger>
                 <SheetContent side="top">
                     <SheetHeader>
-                        <SheetTitle>Edit profile</SheetTitle>
+                        <SheetTitle>Filter Employee</SheetTitle>
                         <SheetDescription>
-                            Make changes to your profile here. Click save when you're done.
+                            Make changes to the field that you want to filter.
                         </SheetDescription>
                     </SheetHeader>
 
-                    <div className="flex gap-1">
-                        {[
-                            { name: "specialist", onClick: handleFacultyFilter },
-                            { name: "type", onClick: handleFacultyFilter },
-                            { name: "holiday", onClick: handleFacultyFilter },
-                            { name: "available", onClick: handleFacultyFilter },
-                        ].map(({ name, onClick }, index) => (
-                            <Button
-                                key={index}
-                                className="flex items-center rounded-full bg-blue-700"
-                                onClick={onClick}
-                            >
-                                {name.charAt(0).toUpperCase() + name.slice(1)}
-                                {" working?"}
-                                <Plus className="h-4 w-4" />
-                            </Button>
-                        ))}
+                    <div className="flex flex-col gap-3 py-5">
+                        <Select onValueChange={(value) => {
+
+                            dispatch(updateEmployeeData({ field: "specialist", value }));
+                        }}>
+                            <SelectTrigger>
+                                <SelectValue placeholder="Choose Position" />
+                            </SelectTrigger>
+                            <SelectContent>
+                                <SelectItem value="Marketing Team">Marketing Team</SelectItem>
+                                <SelectItem value="Development Team">
+                                    Development Team
+                                </SelectItem>
+                                <SelectItem value="Others">Others</SelectItem>
+                            </SelectContent>
+                        </Select>
+                        <MultiSelector />
+
                     </div>
 
-                    <SheetFooter>
+                    <SheetFooter className=" flex mt-6">
                         <SheetClose asChild>
-                            <Button type="submit" className="bg-blue-700 hover:bg-blue-500">
-                                Search Filter
-                            </Button>
+                            <Button className="bg-blue-700 hover:bg-blue-500">Cancel</Button>
                         </SheetClose>
+                        <Button
+                            className="bg-blue-700 hover:bg-blue-500"
+                            onClick={() => fetchData(formState)}
+                        >
+                            Search Filter
+                        </Button>
                     </SheetFooter>
                 </SheetContent>
             </Sheet>
-        </div>
+        </div >
     );
-};
+});
 
 export default FilterInput;
-
-// //const employeeList = [
-//     { "name": "John Doe", "facultyType": "The Coding Team" },
-//     { "name": "Jane Smith", "facultyType": "Innovative Solutions" },
-//     { "name": "Emily Johnson", "facultyType": "Tech Innovators" },
-//     { "name": "Michael Brown", "facultyType": "Digital Pioneers" },
-//     { "name": "Sarah Davis", "facultyType": "Future Tech" },
-//     { "name": "David Wilson", "facultyType": "Tech Experts" },
-//     { "name": "Laura Miller", "facultyType": "Digital Innovators" },
-//     { "name": "Chris Anderson", "facultyType": "Tech Leaders" },
-//     { "name": "Olivia Thomas", "facultyType": "Tech Gurus" },
-//     { "name": "James Taylor", "facultyType": "Future Innovators" },
-//     { "name": "Sophia Martinez", "facultyType": "Tech Visionaries" },
-//     { "name": "Daniel Harris", "facultyType": "Innovation Leaders" },
-//     { "name": "Ava Clark", "facultyType": "Tech Mavericks" },
-//     { "name": "Ethan Lewis", "facultyType": "Digital Masters" },
-//     { "name": "Mia Walker", "facultyType": "Tech Innovators" },
-//     { "name": "Liam Hall", "facultyType": "Future Leaders" },
-//     { "name": "Isabella Young", "facultyType": "Tech Experts" },
-//     { "name": "Jacob Allen", "facultyType": "Digital Gurus" },
-//     { "name": "Charlotte Scott", "facultyType": "Tech Visionaries" },
-//     { "name": "William Wright", "facultyType": "Innovation Masters" }
-// ]

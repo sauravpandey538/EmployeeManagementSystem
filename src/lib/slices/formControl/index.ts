@@ -12,6 +12,7 @@ export interface FormState {
   image: string;
   phoneNumber: string;
   id?: any;
+  specialist: string;
 }
 
 const initialState: FormState = {
@@ -26,6 +27,7 @@ const initialState: FormState = {
   cv: "",
   image: "",
   phoneNumber: "",
+  specialist: "",
 };
 
 export const formSlice = createSlice({

@@ -3,7 +3,7 @@ import { columns } from "./columns";
 import { DataTable } from "./data-table";
 import { useAppSelector, useAppDispatch } from "@/lib/hooks";
 import { fetchEmployee } from "@/lib/slices/apiCall";
-
+import SkeletonTable from "../skeleton/table"
 export default function MainTable() {
     const [data, setData] = useState<any[]>([]);
     const dispatch = useAppDispatch();
@@ -36,6 +36,7 @@ export default function MainTable() {
             {isLoading && <p>Loading...</p>}
             {isError && <p>Error loading data.</p>}
             {!isLoading && !isError && <DataTable columns={columns} data={data} />}
+            {/* <SkeletonTable /> */}
         </div>
     );
 }
