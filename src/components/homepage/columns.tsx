@@ -4,9 +4,9 @@ import { ColumnDef } from "@tanstack/react-table"
 import WorkingDays from "@/components/helpers/WorkingDays"
 import { Button } from "@/components/ui/button"
 import ThreeDot from "@/components/helpers/ThreeDot"
+import { useRouter } from "next/navigation"
 // This type is used to define the shape of our data.
 // You can use a Zod schema here if you want.
-
 export type Employee = {
     employeeId: string
     fullName: string
@@ -16,7 +16,9 @@ export type Employee = {
     email: string,
     info: string
     type: "FULL-TIME" | "PART-TIME"
+    cv: string,
 }
+
 
 export const columns: ColumnDef<Employee>[] = [
     {
@@ -27,9 +29,13 @@ export const columns: ColumnDef<Employee>[] = [
         accessorKey: "name",
         header: "Name",
         cell({ row }) {
+            const router = useRouter();
+            const handleOpenEmployeeDetail = (id: string) => {
+                router.push(`/employee?employeeId=${id}`)
+            }
             const value = row.original
             return <div className="grid gap-1">
-                <div className="font-semibold text-black"> {value.fullName} </div>
+                <div className="font-semibold text-black cursor-pointer" onClick={() => handleOpenEmployeeDetail(value.employeeId)}> {value.fullName} </div>
                 <div className="text-slate-600 text-sm"> {value.specialist} </div>
             </div>
         }
@@ -76,7 +82,9 @@ export const columns: ColumnDef<Employee>[] = [
 
             return <ThreeDot
                 fullName={value.fullName}
-                employeeId={value.id} />
+                employeeId={value.employeeId}
+                cvLink={value.cv}
+            />
         }
     },
 ]

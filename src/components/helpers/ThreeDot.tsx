@@ -18,9 +18,10 @@ import { useRouter } from 'next/navigation';
 interface ComponentNameProps {
     employeeId: string,
     fullName: string,
+    cvLink: string;
 }
 
-const ThreeDot: React.FC<ComponentNameProps> = ({ employeeId, fullName }) => {
+const ThreeDot: React.FC<ComponentNameProps> = ({ employeeId, fullName, cvLink }) => {
     const { toast } = useToast()
     const router = useRouter();
     const [open, setOpen] = useState<boolean>(false)
@@ -74,7 +75,7 @@ const ThreeDot: React.FC<ComponentNameProps> = ({ employeeId, fullName }) => {
                         </MenubarItem>
                         <MenubarSeparator />
 
-                        <MenubarItem>View CV</MenubarItem>
+                        <MenubarItem><a href={cvLink} target="_blank" rel="noopener noreferrer"> View CV</a></MenubarItem>
                         <MenubarSeparator />
 
                         <MenubarItem onClick={handelPoke}>Poke</MenubarItem>

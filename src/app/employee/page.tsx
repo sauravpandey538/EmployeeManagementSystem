@@ -1,67 +1,47 @@
-'use client';
-import React, { useEffect, useState } from 'react';
+'use client'
+import React, { useState, useEffect } from "react"
+import MainComment from "@/components/employee/comment/page"
+import MainProfile from "@/components/employee/profile/page"
+import { useAppSelector, useAppDispatch } from "@/lib/hooks"
+import { fetchSingleEmployee } from "@/lib/slices/getSingleEmployee"
+import SkeletonCard from "@/components/skeleton/table";
 import { useSearchParams } from 'next/navigation';
-import EmployeeDetailsCard from "../../components/helpers/EmployeeDetailsCard"
-interface EmployeeData {
-    additionalInfo: string;
-    employeeId: string;
-    facultyType: string;
-    fullName: string;
-    id: number;
-    salary: any;
-    email?: string;
-    linkedin?: string;
-    picture?: string;
-    phoneNumber?: any;
-}
 
-const FilterEmployee: React.FC = () => {
+import { FormState } from "@/lib/slices/formControl"
+function page() {
+    const [data, setData] = useState<FormState | any>({});
+
     const searchParams = useSearchParams();
-    const title = searchParams.get('title');
-    const paramValue = searchParams.get('paramValue');
+    const dispatch = useAppDispatch();
 
-    const [data, setData] = useState<EmployeeData[] | null>(null);
-    const [loading, setLoading] = useState(true);
-    const [error, setError] = useState<string | null>(null);
-    const [sessionSize, setSessionSize] = useState(0)
+    const employeeId = searchParams.get('employeeId');
+    const employeeData = useAppSelector(state => state.single.data);
+    const isLoading = useAppSelector(state => state.single.isLoading);
+    const isError = useAppSelector(state => state.single.isError);
+
     useEffect(() => {
-
-        const storedData = sessionStorage.getItem('employeeData');
-        console.log('Stored Data:', storedData); // Log raw stored data
-        if (storedData) {
-            try {
-                const parsedData = JSON.parse(storedData);
-
-
-                // changed users to user to aviod mistake
-                if (parsedData.users && Array.isArray(parsedData.users)) {
-                    setData(parsedData.users as EmployeeData[]);
-                } else {
-                    setError('Data format is incorrect, expected an object with a user array.');
-                }
-            } catch (e) {
-                setError('Failed to parse employee data.');
-            }
-        } else {
-            setError('No data found');
+        if (employeeId) {
+            console.log(typeof employeeId)
+            dispatch(fetchSingleEmployee(employeeId));
         }
-        setLoading(false);
-    }, [searchParams]);
+    }, [employeeId, dispatch, searchParams]);
 
-
-    if (loading) return <div>Loading...</div>;
-    if (error) return <div>{error}</div>;
-
-    if (!data || data.length === 0) return <div>No employee data available</div>;
+    useEffect(() => {
+        if (employeeData) {
+            setData(employeeData);
+        }
+    }, [employeeData]);
 
     return (
-        <div className='flex  min-h-screen justify-center items-center flex-col  w-screen gap-10 py-32'>
-            {/* <h1>Employee Details</h1> */}
-            {data.map((employee, index) => (
-                <EmployeeDetailsCard employee={employee} key={index} />
-            ))}
+        <div className='flex justify-center items-center min-h-screen w-full gap-10 border flex-wrap  text-black'>
+            {isLoading && <SkeletonCard />}
+            {isError && <p>Error loading data.</p>}
+            {!isError && employeeData && <>
+                <MainProfile />
+                <MainComment />
+            </>}
         </div>
-    );
-};
+    )
+}
 
-export default FilterEmployee;
+export default page

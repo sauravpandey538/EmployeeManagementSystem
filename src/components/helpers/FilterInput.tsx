@@ -47,8 +47,10 @@ const FilterInput = React.memo(() => {
             }
 
             try {
-                dispatch(fetchFilterEmployee(requestBody));
-                router.push('/filter/employee')
+                const objectAsString = encodeURIComponent(JSON.stringify(requestBody));
+                const url = `/filter/employee?data=${objectAsString}`;
+                // dispatch(fetchFilterEmployee(requestBody));
+                router.push(url)
             } catch (error) {
                 console.error('Error fetching data:', error);
             }
