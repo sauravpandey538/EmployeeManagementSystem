@@ -1,6 +1,6 @@
 import * as React from "react"
-import FirstPage from "../drawer/FirstPage/FilePortion"
-import { Card, CardContent } from "@/components/ui/card"
+import First from "../drawer/FirstPage/page"
+import Second from "../drawer/SecondPage/page"
 import {
     Carousel,
     CarouselContent,
@@ -8,14 +8,11 @@ import {
     CarouselNext,
     CarouselPrevious,
 } from "@/components/ui/carousel"
-import ComponentName from "./EmployeeDetailsCard"
-import SearchOperation from "./SearchOperation"
-import DateData from "../drawer/SecondPage/Date"
 import DataInfo from "../drawer/SecondPage/DataInfo"
 
 export function CarouselMain() {
     // good components will be used 
-    const components = [<FirstPage />, <DataInfo />];
+    const components = [<First />, <Second />];
 
     return (
         <Carousel>

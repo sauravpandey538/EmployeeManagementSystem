@@ -4,14 +4,16 @@ import { Button } from '@/components/ui/button';
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { X } from 'lucide-react';
 import { useAppSelector } from '@/lib/hooks';
+import { useRouter } from 'next/navigation';
 interface User {
     fullName: string;
     image: string;
+    employeeId: string
 }
 
 
 
-function useDebounce(value: string, delay: number): string {
+export function useDebounce(value: string, delay: number): string {
     const [debouncedValue, setDebouncedValue] = useState<string>(value);
 
     useEffect(() => {
@@ -28,6 +30,7 @@ function useDebounce(value: string, delay: number): string {
 }
 
 const DebouncedSearchField: React.FC = () => {
+    const router = useRouter();
     const [inputValue, setInputValue] = useState<string>('');
     const [users, setUsers] = useState<User[]>([]);
     const [isTyping, setIsTyping] = useState<boolean>(false);
@@ -37,19 +40,10 @@ const DebouncedSearchField: React.FC = () => {
     const inputRef = useRef<HTMLInputElement>(null);
     const employeeData = useAppSelector(state => state.api.data); // Adjust according to your state shape
     const fetchUsers = async (query: string): Promise<User[]> => {
-        // const allUsers: User[] = [
-        //     { fullName: 'Alice Smith', picture: 'https://via.placeholder.com/150' },
-        //     { fullName: 'Bob Johnson', picture: 'https://via.placeholder.com/150' },
-        //     { fullName: 'Charlie Williams', picture: 'https://via.placeholder.com/150' },
-        //     { fullName: 'David Brown', picture: 'https://via.placeholder.com/150' },
-        //     { fullName: 'Edward Jones', picture: 'https://via.placeholder.com/150' },
-        //     { fullName: 'Frank Garcia', picture: 'https://via.placeholder.com/150' },
-        //     { fullName: 'Grace Miller', picture: 'https://via.placeholder.com/150' },
-        // ];
-
         const allUsers: User[] = employeeData.users.map((employee: any) => ({
             fullName: employee.fullName,
-            image: employee.image
+            image: employee.image,
+            employeeId: employee.employeeId
         }))
         console.log(allUsers)
         return new Promise((resolve) => {
@@ -64,13 +58,13 @@ const DebouncedSearchField: React.FC = () => {
     useEffect(() => {
         if (debouncedInput) {
             setIsTyping(false);
-            setResultsVisible(true); // Show results when typing
+            setResultsVisible(true);
             fetchUsers(debouncedInput).then((result) => {
                 setUsers(result);
             });
         } else {
             setUsers([]);
-            setResultsVisible(false); // Hide results when input is cleared
+            setResultsVisible(false);
         }
     }, [debouncedInput]);
 
@@ -117,6 +111,7 @@ const DebouncedSearchField: React.FC = () => {
                 >
                     {users.map((user, index) => (
                         <div
+                            onClick={() => router.push(`/employee?employeeId=${user.employeeId}`)}
                             key={index}
                             className='flex w-full items-center hover:bg-blue-300 bg-slate-200 p-3 gap-3 cursor-pointer'
                         >

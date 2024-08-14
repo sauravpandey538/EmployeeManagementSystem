@@ -1,5 +1,5 @@
 "use client";
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useCallback } from "react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
@@ -18,6 +18,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { updateEmployeeData } from '@/lib/slices/formControl';
 import DateData from "./Date";
 import { FormState } from "@/lib/slices/formControl";
+
 const DataInfo = () => {
     const [infoText, setInfoText] = useState<string>("");
     const [phoneNumber, setPhoneNumber] = useState('');
@@ -41,44 +42,53 @@ const DataInfo = () => {
         }
     };
 
+    const debounce = (func: Function, delay: number) => {
+        let timeoutId: NodeJS.Timeout;
+        return (...args: any) => {
+            if (timeoutId) clearTimeout(timeoutId);
+            timeoutId = setTimeout(() => {
+                func(...args);
+            }, delay);
+        };
+    };
+
     const handleInfoChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
         const newText = e.target.value;
-
-        setInfoText(newText);
-        // exceed limit will be controlled by zod later...
-
+        if (newText.length <= 30) {
+            setInfoText(newText);
+        }
     };
+
+    const debouncedDispatchInfo = useCallback(
+        debounce((newText: string) => {
+            dispatch(updateEmployeeData({ field: 'info' as keyof FormState, value: newText }));
+        }, 1000),
+        []
+    );
+
+    useEffect(() => {
+        setInfoCount(infoText.length);
+        if (infoText.trim() !== '') {
+            debouncedDispatchInfo(infoText);
+        }
+    }, [infoText, debouncedDispatchInfo]);
+
     const handlePhoneNumberChange = (e: any) => {
         const newDigit = e.target.value;
         setPhoneNumber(newDigit);
-        console.log(phoneNumber.length)
+    };
 
-
-    }
     useEffect(() => {
-
-        setInfoCount(infoText.length);
-        if (infoText.trim() !== '') {
-            dispatch(updateEmployeeData({ field: 'info' as keyof FormState, value: infoText }));
-
-
-        }
-
-
-    }, [infoText]);
-    useEffect(() => {
-
         if (phoneNumber.length === 10) {
             dispatch(updateEmployeeData({ field: 'phoneNumber' as keyof FormState, value: phoneNumber }));
         }
-
     }, [phoneNumber]);
 
     return (
         <div className="flex flex-col gap-3 max-w-screen-sm w-full p-5">
             <Form {...form}>
                 <form
-                    onSubmit={form.handleSubmit(onSubmit)}
+                    // onSubmit={form.handleSubmit(onSubmit)}
                     className="space-y-4 w-full"
                 >
                     {[
@@ -93,12 +103,13 @@ const DataInfo = () => {
                                 <FormItem>
                                     <FormLabel className="flex justify-between items-center">
                                         {label}
-                                        {name === 'info' && <p>{infoCount}/100</p>}
+                                        {name === 'info' && <p>{infoCount}/300</p>}
                                     </FormLabel>
                                     <FormControl className="w-full">
                                         {name === 'info' ? (
                                             <Textarea
                                                 {...field}
+                                                value={infoText}
                                                 onChange={(e) => {
                                                     field.onChange(e);
                                                     handleInfoChange(e);
@@ -128,17 +139,10 @@ const DataInfo = () => {
                             )}
                         />
                     ))}
-
-
                 </form>
-
             </Form>
-            {/* <Button type="submit" className="w-full bg-blue-700">
-                        {isLoading ? "Submitting..." : "Submit"}
-                    </Button> */}
-            <DateData />
         </div>
     );
 };
+
 export default DataInfo;
-// note : is onchange makes website slow, i will send value as prop to dateInfo

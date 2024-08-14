@@ -5,7 +5,6 @@ import { DrawerDescription } from '@/components/ui/drawer'
 import axios from 'axios'
 import { Button } from '@/components/ui/button'
 import FileUploader from '@/components/helpers/ImageInput'
-import Others from './Other'
 function FirstPage() {
 
     return (
@@ -34,7 +33,6 @@ function FirstPage() {
                     buttonLabel="CV"
                 />
             </div>
-            <Others />
         </>
     )
 }
