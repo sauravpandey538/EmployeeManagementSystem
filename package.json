@@ -33,12 +33,14 @@
     "@tanstack/react-table": "^8.20.1",
     "@types/next": "^9.0.0",
     "axios": "^1.7.2",
+    "bcrypt": "^5.1.1",
     "class-variance-authority": "^0.7.0",
     "cloudinary": "^1.41.3",
     "clsx": "^2.1.1",
     "date-fns": "^3.6.0",
     "dotenv": "^16.4.5",
     "embla-carousel-react": "^8.1.8",
+    "firebase": "^10.13.0",
     "framer-motion": "^11.3.21",
     "knex": "^3.1.0",
     "lucide-react": "^0.418.0",
@@ -63,6 +65,7 @@
     "zod": "^3.23.8"
   },
   "devDependencies": {
+    "@types/bcrypt": "^5.0.2",
     "@types/multer": "^1.4.11",
     "@types/node": "^20",
     "@types/nodemailer": "^6.4.15",

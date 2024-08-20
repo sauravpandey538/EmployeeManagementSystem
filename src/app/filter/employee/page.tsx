@@ -1,8 +1,8 @@
 'use client';
 
 import { useEffect, useState } from "react";
-import { columns } from "@/components/homepage/columns";
-import { DataTable } from "@/components/homepage/data-table";
+import { columns } from "@/components/table/columns";
+import { DataTable } from "@/components/table/data-table";
 import { useAppSelector, useAppDispatch } from "@/lib/hooks";
 import SkeletonCard from "@/components/skeleton/table";
 import { useSearchParams } from "next/navigation";
