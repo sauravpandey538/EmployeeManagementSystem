@@ -4,12 +4,15 @@ import {
   signInWithEmailAndPassword,
   createUserWithEmailAndPassword,
 } from "firebase/auth";
-import { auth } from "@/lib/firebase";
+import { auth as firebaseauth } from "@/lib/firebase";
 import bcrypt from "bcrypt";
+import { generateToken } from "@/utils/jwt";
+
 export async function POST(req: NextRequest) {
   try {
-    const { email, otp, password } = await req.json();
+    const { email, otp, password, role } = await req.json();
 
+    // Validate required fields
     if (!email || !otp || !password) {
       return NextResponse.json(
         { message: "Email, OTP, and password are required" },
@@ -17,7 +20,7 @@ export async function POST(req: NextRequest) {
       );
     }
 
-    // Check if OTP is valid
+    // Verify OTP validity
     const otpRecord = await db("otp_records")
       .where("email", email)
       .andWhere("otp", otp)
@@ -30,30 +33,51 @@ export async function POST(req: NextRequest) {
         { status: 400 }
       );
     }
-    console.log("operation:", otpRecord);
+
     // Create user in Firebase
-    // const hashedPassword = await bcrypt.hash(password, 10);
     const userCredential = await createUserWithEmailAndPassword(
-      auth,
+      firebaseauth!,
       email,
       password
     );
     const user = userCredential.user;
-    // hashing is done by firebase, double safety above
-    // Remove OTP record from database
-    await db("otp_records").where("email", email).delete();
 
-    return NextResponse.json(
+    // Delete OTP record after successful user creation
+    await db("otp_records").where("email", email).delete();
+    const userData = {
+      email,
+      firebase_id: user.uid,
+      role: role ? role : "Employee",
+    };
+    await db("user_details").insert(userData);
+    // Generate and store JWT in a cookie
+    const token = generateToken(userData);
+    const response = NextResponse.json(
       { message: "User created successfully", user: user.uid },
       { status: 200 }
     );
-  } catch (error) {
-    console.error(error);
+    response.cookies.set("authToken", token, {
+      httpOnly: true,
+      secure: process.env.NODE_ENV === "production", // Secure cookie in production
+      sameSite: "strict",
+      path: "/",
+    });
+
+    return response;
+  } catch (error: any) {
+    console.error("Error during OTP verisfication or user creation:", error);
+
+    // Differentiate Firebase errors if needed
+    if (error.code === "auth/email-already-in-use") {
+      return NextResponse.json(
+        { message: "Email is already in use" },
+        { status: 409 }
+      );
+    }
+
     return NextResponse.json(
       { message: "Error verifying OTP or creating user." },
       { status: 500 }
     );
   }
 }
-
-// send otp, verify, save to firebase and then delete otp database.

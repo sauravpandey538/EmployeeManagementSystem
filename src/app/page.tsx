@@ -6,19 +6,20 @@ import Heading from "@/components/table/homepage-heading";
 import MainTable from "@/components/table/table-main";
 import React from "react";
 import SideNavigation from "@/components/SideNavBar/page";
+import ActionBTN from "@/components/landingPage/page";
 
 
 export default function Home() {
 
 
   return (
-    <div className="flex flex-col ">
+    <div className="flex flex-col justify-center items-center h-screen ">
 
-      <SideNavigation />
+      {/* <SideNavigation />s
       <Heading />
-      <MainTable />
+      <MainTable /> */}
 
-
+      <ActionBTN />
 
     </div>
   );
