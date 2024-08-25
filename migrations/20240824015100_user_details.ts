@@ -5,7 +5,6 @@ export async function up(knex: Knex): Promise<void> {
     table.increments("id").primary();
     table.string("email").unique().notNullable().index();
     table.string("firebase_id").unique().notNullable();
-    table.timestamp("token_expires_at").nullable();
     table.enum("role", ["Admin", "Employee"]).notNullable();
     table.timestamps(true, true);
   });

@@ -33,5 +33,3 @@ export async function sendEmail(email: string, otp: number) {
     throw error; // Optional: Rethrow the error for further handling
   }
 }
-
-// Call the function

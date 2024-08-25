@@ -23,7 +23,7 @@ const generateToken = (payload: TokenPayload): string => {
   }
 };
 
-const verifyToken = (token: string): JwtPayload | null => {
+const verifyToken = (token: string): any => {
   if (!process.env.JWT_SECRET_KEY) {
     throw new Error("JWT_SECRET_KEY is not set");
   }

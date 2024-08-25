@@ -18,3 +18,12 @@ export async function up(knex: Knex): Promise<void> {
 export async function down(knex: Knex): Promise<void> {
   return knex.schema.dropTable("leave_details");
 }
+
+// {
+//   "employee_id": "E004",
+//   "leave_type": "Sick",
+//   "start_date": "2024-08-25 08:00:00",
+//   "end_date": "2024-08-25 08:00:00",
+//   "applied_date": "2024-08-25 08:00:00",
+//   "reason": "I am so sick to work, thank you"
+// }
