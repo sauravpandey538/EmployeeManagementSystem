@@ -10,7 +10,6 @@ import ActionBTN from "@/components/landingPage/page";
 
 
 export default function Home() {
-  const age = 23;
 
   return (
     <div className="flex flex-col justify-center items-center h-screen ">
