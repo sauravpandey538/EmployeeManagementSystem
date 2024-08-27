@@ -10,7 +10,7 @@ import ActionBTN from "@/components/landingPage/page";
 
 
 export default function Home() {
-
+const name = "saurav";
 
   return (
     <div className="flex flex-col justify-center items-center h-screen ">
